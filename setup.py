@@ -13,9 +13,9 @@ setup(
     install_requires=[
         'bcrypt==4.1.3',
         'cffi==1.16.0',
-        'cryptography==42.0.8',
-        'paramiko==3.4.0',
-        'pycparser==2.22',
+        'cryptography==38.0.1',
+        'paramiko==2.11.0',
+        'pycparser==2.21',
         'PyNaCl==1.5.0'
     ],
     classifiers=[
