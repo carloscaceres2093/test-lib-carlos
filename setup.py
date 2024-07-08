@@ -16,7 +16,8 @@ setup(
         'cryptography==38.0.1',
         'paramiko==2.11.0',
         'pycparser==2.21',
-        'PyNaCl==1.5.0'
+        'PyNaCl==1.5.0',
+        'boto3==1.24.43'
     ],
     classifiers=[
         'Programming Language :: Python :: 3',
