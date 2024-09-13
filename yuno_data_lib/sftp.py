@@ -57,3 +57,30 @@ def transfer_sftp_2_s3(sftp_conn, s3_conn,  sftp_file_path, s3_file_path, bucket
         logging.info("SUCCEEDED_STREAM_FILE")
     sftp_file.close()
     logging.info("TRANSFER_COMPLETED_FROM_FTP_TO_S3")
+
+
+def open_ssh_connection(ssh_host, ssh_user, ssh_pass, port=22):
+    
+    """
+    Opens ftp connection.
+        Parameters:
+            ftp_host: SFTP host name
+            ftp_user: SFTP user name
+            ftp_pass: SFTP password
+        Returns:
+            SFTP Connection
+            SSH Connection
+    """
+    ssh_client = paramiko.SSHClient()
+    ssh_client.load_system_host_keys()
+    ssh_client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+    try:
+        ssh_client.connect(hostname=ssh_host, port=port, username=ssh_user, password=ssh_pass)
+        sftp_client = ssh_client.open_sftp()
+    except paramiko.AuthenticationException:
+        print("Authentication failed, please verify your credentials.")
+    except paramiko.SSHException as sshException:
+        print(f"Unable to establish SSH connection: {sshException}")
+    except Exception as e:
+        print(f"Exception occurred: {e}")
+    return sftp_client, ssh_client
