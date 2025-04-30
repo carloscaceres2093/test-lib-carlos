@@ -84,3 +84,41 @@ def open_ssh_connection(ssh_host, ssh_user, ssh_pass, port=22):
     except Exception as e:
         print(f"Exception occurred: {e}")
     return sftp_client, ssh_client
+
+
+def open_ftp_connection_by_private_key(sftp_host, sftp_user, sftp_key, sftp_port=22):
+    """
+    Establishes a secure SFTP connection to a server using a private key.
+
+    Args:
+        SFTP_HOST (str): The address of the SFTP server.
+        SFTP_USERNAME (str): The username for authentication.
+        SFTP_KEY (str): The private key in PEM format as a string.
+
+    Returns:
+        paramiko.SFTPClient: An active SFTP client connection.
+
+    Raises:
+        SystemExit: If connection, authentication, or SFTP initialization fails.
+    """
+
+    pkey = paramiko.RSAKey.from_private_key(io.StringIO(sftp_key))
+    client = paramiko.SSHClient()
+    client.load_system_host_keys()
+    try:
+        transport = paramiko.Transport(sftp_host,sftp_port)
+    except Exception as err:
+        logging.error("Failed to connect FTP Server!")
+        raise SystemExit(err)
+    try:
+        transport.connect(username=sftp_user, pkey=pkey)
+    except Exception as err:
+        logging.error("Incorrect username or password!")
+        raise SystemExit(err)
+    try:
+        ftp_connection = paramiko.SFTPClient.from_transport(transport)
+    except Exception as err:
+        logging.error("SFTP connection error!")
+        raise SystemExit(err)
+
+    return ftp_connection
