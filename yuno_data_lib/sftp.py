@@ -101,12 +101,10 @@ def open_ftp_connection_by_private_key(sftp_host, sftp_user, sftp_key, sftp_port
     Raises:
         SystemExit: If connection, authentication, or SFTP initialization fails.
     """
-
+    logging.info(f"host: {sftp_host}, port: {sftp_port}, user: {sftp_user}")
     pkey = paramiko.RSAKey.from_private_key(io.StringIO(sftp_key))
-    client = paramiko.SSHClient()
-    client.load_system_host_keys()
     try:
-        transport = paramiko.Transport(sftp_host,sftp_port)
+        transport = paramiko.Transport((sftp_host,sftp_port))
     except Exception as err:
         logging.error("Failed to connect FTP Server!")
         raise SystemExit(err)
